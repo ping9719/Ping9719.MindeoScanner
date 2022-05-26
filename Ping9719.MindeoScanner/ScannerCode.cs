@@ -13,7 +13,10 @@ namespace Ping9719.MindeoScanner
     /// </summary>
     public class ScannerCode
     {
-        SerialPort serialPort = null;
+        /// <summary>
+        /// 串口
+        /// </summary>
+        public SerialPort SerialPort { get; private set; } = null;
         bool isHostRead = false;
 
         /// <summary>
@@ -30,17 +33,30 @@ namespace Ping9719.MindeoScanner
         /// <summary>
         /// 打开扫码器
         /// </summary>
-        /// <param name="portName"></param>
+        /// <param name="portName">端口名</param>
         public void Open(string portName)
         {
-            if (serialPort != null)
+            Open(portName, 9600, Parity.None, 8, StopBits.One);
+        }
+
+        /// <summary>
+        /// 打开扫码器
+        /// </summary>
+        /// <param name="portName">端口名</param>
+        /// <param name="baudRate">波特率</param>
+        /// <param name="parity">奇偶校验位</param>
+        /// <param name="dataBits">数据位</param>
+        /// <param name="stopBits">停止位</param>
+        public void Open(string portName, int baudRate, Parity parity, int dataBits, StopBits stopBits)
+        {
+            if (SerialPort != null)
                 throw new Exception("已经有打开的串口");
 
-            serialPort = new SerialPort(portName, 9600, Parity.None, 8, StopBits.One);
-            serialPort.ReadTimeout = 500;
-            serialPort.ReadTimeout = 500;
-            serialPort.DataReceived += SerialPort_DataReceived;
-            serialPort.Open();
+            SerialPort = new SerialPort(portName, baudRate, parity, dataBits, stopBits);
+            SerialPort.ReadTimeout = 500;
+            SerialPort.ReadTimeout = 500;
+            SerialPort.DataReceived += SerialPort_DataReceived;
+            SerialPort.Open();
         }
 
         /// <summary>
@@ -48,8 +64,8 @@ namespace Ping9719.MindeoScanner
         /// </summary>
         public void Close()
         {
-            serialPort?.Close();
-            serialPort = null;
+            SerialPort?.Close();
+            SerialPort = null;
         }
 
         string mess = string.Empty;//主机模式提供消息
@@ -64,15 +80,15 @@ namespace Ping9719.MindeoScanner
             int topNum = 0;
             while (true)
             {
-                if (topNum == serialPort.BytesToRead || topNum >= Int16.MaxValue)
+                if (topNum == SerialPort.BytesToRead || topNum >= Int16.MaxValue)
                     break;
 
-                topNum = serialPort.BytesToRead;
+                topNum = SerialPort.BytesToRead;
 
                 Thread.Sleep(100);
             }
 
-            var mess2 = serialPort.ReadExisting();
+            var mess2 = SerialPort.ReadExisting();
             //去掉尾部一个换行
             if (mess2.EndsWith(Environment.NewLine))
                 mess2 = mess2.Remove(mess2.Length - Environment.NewLine.Length);
@@ -93,18 +109,18 @@ namespace Ping9719.MindeoScanner
         /// <returns></returns>
         public string ReadHostOne(int keepTime = 4)
         {
-            if (serialPort == null)
+            if (SerialPort == null)
                 return null;
 
             //清空字符,还原状态
-            serialPort.ReadExisting();
+            SerialPort.ReadExisting();
             mess = string.Empty;
             isHostRead = true;
 
             var t1 = Task.Run(() =>
             {
                 byte[] sendscancode = new byte[] { 0x16, 0x54, 0x0D };
-                serialPort.Write(sendscancode, 0, sendscancode.Length);
+                SerialPort.Write(sendscancode, 0, sendscancode.Length);
                 Thread.Sleep(1000 * keepTime);
             });
             var t2 = Task.Run(() =>
@@ -139,11 +155,11 @@ namespace Ping9719.MindeoScanner
         /// <returns>扫描结果</returns>
         public string ReadHostFor(CancellationToken ct, int keepTime = 4, int gapTime = 1000)
         {
-            if (serialPort == null)
+            if (SerialPort == null)
                 return null;
 
             //清空字符,还原状态
-            serialPort.ReadExisting();
+            SerialPort.ReadExisting();
             mess = string.Empty;
             isHostRead = true;
             readHostForEnd = false;
@@ -160,7 +176,7 @@ namespace Ping9719.MindeoScanner
                             break;
                     }
 
-                    serialPort.Write(stateCode, 0, stateCode.Length);
+                    SerialPort.Write(stateCode, 0, stateCode.Length);
                     Thread.Sleep(1000 * keepTime + 1000);
                 }
             });
@@ -184,7 +200,7 @@ namespace Ping9719.MindeoScanner
 
             //取消扫描
             byte[] endCode = new byte[] { 0x16, 0x55, 0x0D };
-            serialPort.Write(endCode, 0, endCode.Length);
+            SerialPort.Write(endCode, 0, endCode.Length);
             return mess;
         }
 
