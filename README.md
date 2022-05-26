@@ -19,7 +19,7 @@ WindowsFormsApp1/Form1.cs
 ### 开始使用 [How To Use]
 #### 连接 [connect]
 ```CSharp
-using MindeoScanner.Ping;
+using Ping9719.MindeoScanner;
 
 ScannerCode scannerCode = new ScannerCode();
 scannerCode.Open("COM1");
