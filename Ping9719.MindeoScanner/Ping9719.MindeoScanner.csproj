@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFrameworks>net4.5;netstandard2.0;net5.0</TargetFrameworks>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <Authors>Ping9719</Authors>
+	  <Description>民德扫码枪实现。(Mindeo Scanner)</Description>
+	  <PackageProjectUrl>https://github.com/ping9719/Ping9719.MindeoScanner</PackageProjectUrl>
+	  <RepositoryUrl>https://github.com/ping9719/Ping9719.MindeoScanner</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.IO.Ports">
+      <Version>6.0.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
+    <PackageReference Include="System.IO.Ports">
+      <Version>6.0.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
