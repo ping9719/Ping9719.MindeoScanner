@@ -27,6 +27,7 @@ scannerCode.Open("COM1");
 
 #### 方法 [method]
 ```CSharp
+//建议先恢复出厂模式，在设置为主机模式
 scannerCode.ReadHostOne();//在主机模式下执行一次
 scannerCode.ReadHostFor();//在主机模式下一直执行，直到扫描到物品
 ```
