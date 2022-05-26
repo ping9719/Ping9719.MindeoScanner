@@ -19,6 +19,9 @@ namespace Ping9719.MindeoScanner
         public SerialPort SerialPort { get; private set; } = null;
         bool isHostRead = false;
 
+        byte[] stateCode = new byte[] { 0x16, 0x54, 0x0D };//开始扫描
+        byte[] endCode = new byte[] { 0x16, 0x55, 0x0D };//取消扫描
+
         /// <summary>
         /// 扫描到的所有消息事件数据
         /// </summary>
@@ -119,8 +122,7 @@ namespace Ping9719.MindeoScanner
 
             var t1 = Task.Run(() =>
             {
-                byte[] sendscancode = new byte[] { 0x16, 0x54, 0x0D };
-                SerialPort.Write(sendscancode, 0, sendscancode.Length);
+                SerialPort.Write(stateCode, 0, stateCode.Length);
                 Thread.Sleep(1000 * keepTime);
             });
             var t2 = Task.Run(() =>
@@ -166,7 +168,7 @@ namespace Ping9719.MindeoScanner
 
             var t1 = Task.Run(() =>
             {
-                byte[] stateCode = new byte[] { 0x16, 0x54, 0x0D };
+
                 while (!readHostForEnd)
                 {
                     if (ct != CancellationToken.None)
@@ -198,11 +200,25 @@ namespace Ping9719.MindeoScanner
             Task.WaitAny(t1, t2);
             readHostForEnd = true;
 
-            //取消扫描
-            byte[] endCode = new byte[] { 0x16, 0x55, 0x0D };
             SerialPort.Write(endCode, 0, endCode.Length);
             return mess;
         }
 
+        /// <summary>
+        /// 给扫码枪发送指令
+        /// </summary>
+        /// <param name="info">发送的命令</param>
+        public void Send(byte[] info)
+        {
+            SerialPort.Write(info, 0, info.Length);
+        }
+
+        /// <summary>
+        /// 给扫码枪发送取消扫描指令
+        /// </summary>
+        public void SendCancel()
+        {
+            SerialPort.Write(endCode, 0, endCode.Length);
+        }
     }
 }

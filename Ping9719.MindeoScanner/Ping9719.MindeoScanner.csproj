@@ -8,7 +8,7 @@
 	  <Description>民德扫码枪实现。(Mindeo Scanner)</Description>
 	  <PackageProjectUrl>https://github.com/ping9719/Ping9719.MindeoScanner</PackageProjectUrl>
 	  <RepositoryUrl>https://github.com/ping9719/Ping9719.MindeoScanner</RepositoryUrl>
-	  <Version>1.1.0</Version>
+	  <Version>1.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
