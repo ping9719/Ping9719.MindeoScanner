@@ -1,4 +1,4 @@
-# MindeoScanner.Ping
+# Ping9719.MindeoScanner
 
 ### 民德扫码器的实现。
 ##### Mindeo Scanner. 
