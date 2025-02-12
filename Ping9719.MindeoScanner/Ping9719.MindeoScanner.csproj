@@ -1,26 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFrameworks>net4.5;netstandard2.0;net5.0</TargetFrameworks>
+	  <TargetFrameworks>net4.5;netstandard2.0</TargetFrameworks>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
-	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	  <Authors>Ping9719</Authors>
 	  <Description>民德扫码枪实现。(Mindeo Scanner)</Description>
 	  <PackageProjectUrl>https://github.com/ping9719/Ping9719.MindeoScanner</PackageProjectUrl>
 	  <RepositoryUrl>https://github.com/ping9719/Ping9719.MindeoScanner</RepositoryUrl>
-	  <Version>1.2.0</Version>
+	  <Version>1.2.1</Version>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.IO.Ports">
-      <Version>6.0.0</Version>
+      <Version>9.0.2</Version>
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
-    <PackageReference Include="System.IO.Ports">
-      <Version>6.0.0</Version>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net45" Version="1.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="docs\README.md">
+      <PackagePath>\</PackagePath>
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
+	
 </Project>
